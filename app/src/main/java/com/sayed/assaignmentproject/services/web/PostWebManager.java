@@ -20,7 +20,7 @@ public class PostWebManager {
         PagedList.Config config = new PagedList.Config.Builder()
                 .setMaxSize(Constants.MAX_SIZE)
                 .setEnablePlaceholders(false)
-                .setPageSize(50)
+                .setPageSize(10)
                 .build();
         Executor executor = Executors.newFixedThreadPool(Constants.NUMBER_OF_THREADS);
         LivePagedListBuilder pagedListBuilder = new LivePagedListBuilder(postDataSourceFactory , config)

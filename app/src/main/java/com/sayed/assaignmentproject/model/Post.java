@@ -91,6 +91,7 @@ public class Post extends BaseObservable {
         }
     };
 
+
     @Override
     public String toString() {
         return "Post{" +
