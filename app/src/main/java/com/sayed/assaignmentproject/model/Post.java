@@ -11,9 +11,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.sayed.assaignmentproject.services.local.DBhelper;
+import com.sayed.assaignmentproject.services.local.DbUtilities;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.sayed.assaignmentproject.services.local.DbUtilities.COLUMN_TIMESTAMP;
 
 /*here base observable is for data binding
 we will use different annotation of jackson
@@ -29,6 +34,9 @@ public class Post extends BaseObservable {
     private String title;
     @JsonProperty("body")
     private String body;
+    @JsonProperty(COLUMN_TIMESTAMP)
+    private Timestamp timestamp ;
+
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -48,8 +56,9 @@ public class Post extends BaseObservable {
         return id;
     }
     @JsonProperty("id")
-    public void setId(Integer id) {
+    public Post setId(Integer id) {
         this.id = id;
+        return this ;
     }
     @Bindable
     @JsonProperty("userId")
@@ -57,8 +66,9 @@ public class Post extends BaseObservable {
         return userId;
     }
     @JsonProperty("userId")
-    public void setUserId(Integer userId) {
+    public Post setUserId(Integer userId) {
         this.userId = userId;
+        return this ;
     }
     @Bindable
     @JsonProperty("title")
@@ -66,8 +76,9 @@ public class Post extends BaseObservable {
         return title;
     }
     @JsonProperty("title")
-    public void setTitle(String title) {
+    public Post setTitle(String title) {
         this.title = title;
+        return this ;
     }
     @Bindable
     @JsonProperty("body")
@@ -75,8 +86,19 @@ public class Post extends BaseObservable {
         return body;
     }
     @JsonProperty("body")
-    public void setBody(String body) {
+    public Post setBody(String body) {
         this.body = body;
+        return this ;
+    }
+    @Bindable
+    @JsonProperty(COLUMN_TIMESTAMP)
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+    @JsonProperty(COLUMN_TIMESTAMP)
+    public Post setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+        return this ;
     }
 
     public static DiffUtil.ItemCallback<Post> postItemCallback = new DiffUtil.ItemCallback<Post>() {

@@ -26,4 +26,16 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         this.post_body.setText(post.getBody());
         this.post_title.setText(post.getTitle());
    }
+
+    public TextView getPost_id() {
+        return post_id;
+    }
+
+    public TextView getPost_title() {
+        return post_title;
+    }
+
+    public TextView getPost_body() {
+        return post_body;
+    }
 }
