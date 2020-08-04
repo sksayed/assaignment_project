@@ -66,7 +66,7 @@ public class PostListFragment extends Fragment {
         mViewModel.getPagedListLiveData().observe(getViewLifecycleOwner(), new Observer<PagedList<Post>>() {
             @Override
             public void onChanged(PagedList<Post> posts) {
-              //  pageAdapter.submitList(posts);
+                pageAdapter.submitList(posts);
             }
         });
 

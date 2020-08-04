@@ -22,11 +22,11 @@ import com.sayed.assaignmentproject.model.Post;
 import com.sayed.assaignmentproject.view.adapter.PostNormalAdapter;
 import com.sayed.assaignmentproject.view.viewmodel.PostListViewModel;
 
-public class PostListFragmentTest extends Fragment {
+public class PostListFragmentLocalDb extends Fragment {
     private RecyclerView recyclerView;
     private PostListViewModel mViewModel;
     private PostNormalAdapter normalAdapter;
-    private PostListFragmentTest instance;
+    private PostListFragmentLocalDb instance;
 
     public static PostListFragment newInstance() {
         return new PostListFragment();
@@ -55,7 +55,7 @@ public class PostListFragmentTest extends Fragment {
     private void initView(View view) {
         this.recyclerView = view.findViewById(R.id.post_recycler_view);
         mViewModel = ViewModelProviders.of(this).get(PostListViewModel.class);
-        normalAdapter = new PostNormalAdapter(mViewModel.getAllPostSync());
+        normalAdapter = new PostNormalAdapter();
     }
 
 

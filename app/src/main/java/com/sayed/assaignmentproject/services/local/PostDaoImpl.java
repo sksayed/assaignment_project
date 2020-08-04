@@ -34,7 +34,7 @@ public class PostDaoImpl implements PostDao {
     private static PostDaoImpl instance;
     private Context context;
     private final SQLiteDatabase mDatabase;
-    private ContentValues contentValues;
+
 
 
     public PostDaoImpl(Context context) {
@@ -70,7 +70,7 @@ public class PostDaoImpl implements PostDao {
                             (resultCursor.getColumnIndex(COLUMN_TIMESTAMP)));
                     Timestamp timestamp = new Timestamp(date.getTime());
                 } catch (ParseException e) {
-                    Log.d(TAG , "Parsing e somossa"+e.getMessage());
+                    Log.d(TAG, "Parsing e somossa" + e.getMessage());
                 }
                 postListResult.add(post);
 
@@ -79,6 +79,14 @@ public class PostDaoImpl implements PostDao {
         return postListResult;
     }
 
+    /**
+     * I dont need to take care of
+     * timestamp as it will be handled by database
+     * itself
+     *
+     * @param post this post will come from web or user input
+     * @return boolean on the basis of insert
+     */
     @Override
     public boolean insert(Post post) {
         ContentValues insertCV = new ContentValues();
@@ -98,17 +106,74 @@ public class PostDaoImpl implements PostDao {
 
     @Override
     public boolean update(Post post) {
-        return false;
+        ContentValues updateValues = new ContentValues();
+        updateValues.put(COLUMN_USER_ID, post.getUserId());
+        updateValues.put(COLUMN_TITLE, post.getTitle());
+        updateValues.put(COLUMN_BODY, post.getBody());
+
+        int result = mDatabase.update(POST_TABLE_NAME,
+                updateValues,
+                COLUMN_ID + " = ?",
+                new String[]{post.getId().toString()}
+        );
+
+        if (result > 0) {
+            Log.d(TAG, "Update result" + result);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean delete(Post post) {
-        return false;
+        int result = mDatabase.delete(POST_TABLE_NAME,
+                COLUMN_ID + " = ?",
+                new String[]{post.getId().toString()}
+        );
+        if (result > 0) {
+            Log.d(TAG, "Delete result" + result);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public void getAllPostAsync(Consumer<List<Post>> allPostCallBack) {
+        executorService.execute(() -> {
+            List<Post> postListResult = new ArrayList<>();
+            Cursor resultCursor = mDatabase.query(POST_TABLE_NAME
+                    , null
+                    , null
+                    , null
+                    , null
+                    , null
+                    , COLUMN_ID + " ASC"
+                    , null
+            );
 
+            if (resultCursor.moveToFirst()) {
+                do {
+                    Post post = new Post()
+                            .setId(resultCursor.getInt(resultCursor.getColumnIndex(COLUMN_ID)))
+                            .setUserId(resultCursor.getInt(resultCursor.getColumnIndex(COLUMN_USER_ID)))
+                            .setTitle(resultCursor.getString(resultCursor.getColumnIndex(COLUMN_TITLE)))
+                            .setBody(resultCursor.getString((resultCursor.getColumnIndex(COLUMN_BODY))));
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    try {
+                        Date date = dateFormat.parse(resultCursor.getString
+                                (resultCursor.getColumnIndex(COLUMN_TIMESTAMP)));
+                        Timestamp timestamp = new Timestamp(date.getTime());
+                    } catch (ParseException e) {
+                        Log.d(TAG, "Parsing e somossa" + e.getMessage());
+                    }
+                    postListResult.add(post);
+
+                } while (resultCursor.moveToNext());
+            }
+            allPostCallBack.accept(postListResult);
+        });
     }
 
     @Override
@@ -132,12 +197,42 @@ public class PostDaoImpl implements PostDao {
 
     @Override
     public void updateAsync(Post post, Consumer<Boolean> updateCallback) {
+        executorService.execute(() -> {
+            ContentValues updateValues = new ContentValues();
+            updateValues.put(COLUMN_USER_ID, post.getUserId());
+            updateValues.put(COLUMN_TITLE, post.getTitle());
+            updateValues.put(COLUMN_BODY, post.getBody());
+
+            int result = mDatabase.update(POST_TABLE_NAME,
+                    updateValues,
+                    COLUMN_ID + " = ?",
+                    new String[]{post.getId().toString()}
+            );
+
+            if (result > 0) {
+                Log.d(TAG, "Update result" + result);
+                updateCallback.accept(true);
+            } else {
+                updateCallback.accept(false);
+            }
+        });
 
     }
 
     @Override
     public void deleteAsync(Post post, Consumer<Boolean> deleteCallback) {
-
+        executorService.execute(() -> {
+            int result = mDatabase.delete(POST_TABLE_NAME,
+                    COLUMN_ID + " = ?",
+                    new String[]{post.getId().toString()}
+            );
+            if (result > 0) {
+                Log.d(TAG, "Delete result" + result);
+                deleteCallback.accept(true);
+            } else {
+                deleteCallback.accept(false);
+            }
+        });
     }
 
 }

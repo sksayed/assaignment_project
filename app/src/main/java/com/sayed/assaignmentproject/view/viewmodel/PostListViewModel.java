@@ -51,4 +51,6 @@ public class PostListViewModel extends AndroidViewModel {
         return repository.getAllPostSync();
     }
 
+
+
 }

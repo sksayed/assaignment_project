@@ -1,19 +1,12 @@
 package com.sayed.assaignmentproject.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.sayed.assaignmentproject.R;
-import com.sayed.assaignmentproject.model.Post;
 import com.sayed.assaignmentproject.services.web.api.PostInterfaceAPI;
-import com.sayed.assaignmentproject.services.web.api.PostInterfaceApiImpl;
-import com.sayed.assaignmentproject.view.fragment.PostListFragment;
-import com.sayed.assaignmentproject.view.fragment.PostListFragmentTest;
-
-import java.util.List;
+import com.sayed.assaignmentproject.view.fragment.PostListFragmentLocalDb;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (findViewById(R.id.fragment_container) != null) {
-            PostListFragmentTest postListFragment = new PostListFragmentTest();
+            PostListFragmentLocalDb postListFragment = new PostListFragmentLocalDb();
               getSupportFragmentManager().beginTransaction()
                       .add(R.id.fragment_container , postListFragment)
                       .addToBackStack(null)

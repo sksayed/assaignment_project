@@ -11,14 +11,15 @@ import com.sayed.assaignmentproject.R;
 import com.sayed.assaignmentproject.model.Post;
 import com.sayed.assaignmentproject.view.viewholder.PostViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostNormalAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
-    private final List<Post> postList  ;
+    private final List<Post> postList  = new ArrayList<>();
 
-    public PostNormalAdapter(List<Post> postList) {
-        this.postList = postList;
+    //empty constructor
+    public PostNormalAdapter(){
     }
 
     @NonNull
