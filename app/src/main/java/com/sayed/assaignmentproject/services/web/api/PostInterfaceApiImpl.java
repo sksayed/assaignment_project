@@ -35,7 +35,7 @@ public class PostInterfaceApiImpl implements PostInterfaceAPI {
     private Executor executorService;
     private List<Post> resultList;
 
-    private PostInterfaceApiImpl() {
+    public PostInterfaceApiImpl() {
     }
 
     /*

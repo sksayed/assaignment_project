@@ -5,15 +5,19 @@ import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 import com.sayed.assaignmentproject.model.Post;
+import com.sayed.assaignmentproject.services.web.api.PostInterfaceApiImpl;
 import com.sayed.assaignmentproject.services.web.paging.PostDataSourceFactory;
 import com.sayed.assaignmentproject.utilities.Constants;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 public class PostWebManager {
     private static final String TAG = PostWebManager.class.getSimpleName();
     private final LiveData<PagedList<Post>> postPaged ;
+    private final PostInterfaceApiImpl interfaceApi = new PostInterfaceApiImpl();
 
     public PostWebManager(PostDataSourceFactory postDataSourceFactory ,
                           PagedList.BoundaryCallback<Post> postBoundaryCallback) {
@@ -33,4 +37,10 @@ public class PostWebManager {
     public LiveData<PagedList<Post>> getPostPaged() {
         return postPaged;
     }
+
+    //this method is for retriving data from web
+    public void getAllpostFromWebAsync (Consumer<List<Post>> allPostCallBAck) {
+        interfaceApi.getAllPostsFromWeb(posts -> allPostCallBAck.accept(posts));
+    }
+
 }
