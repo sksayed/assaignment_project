@@ -18,39 +18,48 @@ import java.util.List;
 
 public class PostListViewModel extends AndroidViewModel {
     // TODO: Implement the ViewModel
-    private  final Repository repository ;
-    private final LiveData<PagedList<Post>> pagedListLiveData ;
-    private MutableLiveData<Boolean> valueReturnedFromDb ;
+    private final Repository repository;
+    private final LiveData<PagedList<Post>> pagedListLiveData;
+    private final MutableLiveData<List<Post>> allPostFromDbLiveData;
+    private MutableLiveData<Boolean> valueReturnedFromDb;
 
     public PostListViewModel(@NonNull Application application) {
         super(application);
         repository = new Repository(application);
         pagedListLiveData = repository.getPagedListLiveData();
         valueReturnedFromDb = new MutableLiveData<>();
+        allPostFromDbLiveData = new MutableLiveData<>();
     }
 
     public LiveData<PagedList<Post>> getPagedListLiveData() {
         return pagedListLiveData;
     }
 
-    public boolean insertPost (Post post) {
-      return   repository.insertPostToDb(post);
+    public boolean insertPost(Post post) {
+        return repository.insertPostToDb(post);
     }
 
-    public void insertPostAsync (Post post) {
-           repository.insertAsync(post , value -> {
-              valueReturnedFromDb.postValue(value);
-           });
+    public void insertPostAsync(Post post) {
+        repository.insertAsync(post, value -> {
+            valueReturnedFromDb.postValue(value);
+        });
     }
 
     public LiveData<Boolean> getValueReturnedFromDb() {
         return valueReturnedFromDb;
     }
 
-    public List<Post> getAllPostSync () {
+    public List<Post> getAllPostSync() {
         return repository.getAllPostSync();
     }
 
+    public LiveData<List<Post>> getAllPostFromDbAsync() {
+        repository.getAllPostFrommDbAsync(posts -> {
+            allPostFromDbLiveData.postValue(posts);
+            valueReturnedFromDb.postValue(true);
+        });
+        return allPostFromDbLiveData;
+    }
 
 
 }

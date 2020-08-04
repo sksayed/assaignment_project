@@ -16,7 +16,7 @@ import java.util.List;
 
 public class PostNormalAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
-    private final List<Post> postList  = new ArrayList<>();
+    private  List<Post> postList  = new ArrayList<>();
 
     //empty constructor
     public PostNormalAdapter(){
@@ -42,4 +42,10 @@ public class PostNormalAdapter extends RecyclerView.Adapter<PostViewHolder> {
     public int getItemCount() {
         return postList.size();
     }
+
+
+    public void setPostList(List<Post> postList) {
+        this.postList = postList;
+    }
+
 }

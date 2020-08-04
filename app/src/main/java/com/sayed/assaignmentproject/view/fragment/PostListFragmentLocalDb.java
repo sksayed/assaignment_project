@@ -22,6 +22,8 @@ import com.sayed.assaignmentproject.model.Post;
 import com.sayed.assaignmentproject.view.adapter.PostNormalAdapter;
 import com.sayed.assaignmentproject.view.viewmodel.PostListViewModel;
 
+import java.util.List;
+
 public class PostListFragmentLocalDb extends Fragment {
     private RecyclerView recyclerView;
     private PostListViewModel mViewModel;
@@ -49,7 +51,7 @@ public class PostListFragmentLocalDb extends Fragment {
         manager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(normalAdapter);
-        normalAdapter.notifyDataSetChanged();
+
     }
 
     private void initView(View view) {
@@ -61,10 +63,19 @@ public class PostListFragmentLocalDb extends Fragment {
 
     public void handleObservable() {
         // TODO: Use the ViewModel
+        //this one retrives from web
         mViewModel.getPagedListLiveData().observe(getViewLifecycleOwner(), new Observer<PagedList<Post>>() {
             @Override
             public void onChanged(PagedList<Post> posts) {
                 //  pageAdapter.submitList(posts);
+            }
+        });
+
+        mViewModel.getAllPostFromDbAsync().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
+            @Override
+            public void onChanged(List<Post> posts) {
+                normalAdapter.setPostList(posts);
+                normalAdapter.notifyDataSetChanged();
             }
         });
 

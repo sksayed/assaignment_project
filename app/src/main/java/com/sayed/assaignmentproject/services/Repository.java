@@ -63,4 +63,8 @@ public class Repository {
     public List<Post> getAllPostSync() {
         return dbService.getAllposts();
     }
+
+    public void getAllPostFrommDbAsync(Consumer<List<Post>> allPostList) {
+         dbService.getAllPostAsync(posts -> allPostList.accept(posts));
+    }
 }
